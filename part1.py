@@ -1,12 +1,14 @@
 import requests
 import json
 apikey='Basic ODQxZTJhMjA2Yjc1NDczY2ExMTM0ZTA5ZjMxYmE3Nzc6YmZlMGQ1ZjA4ZjY3NDdlZDg0NzdhY2U0ZWM3NDQ0YjQ='
-header={'Authorization' :apikey,'Content-Type':'application/x-www-form-urlencoded'}
+header={'Authorization' :apikey,'Content-Type':'application/json'}
 oid=requests.get("https://management.api.umbrella.com/v1/organizations/",headers=header)
 oid=oid.json()
 orgid=str(oid[0]["organizationId"])
 print("The organisation Id is {}" .format(orgid))
 print(" ")
+
+
 
 def List_Network_devices():
 	list_devices=requests.get("https://management.api.umbrella.com/v1/organizations/" + orgid + "/networkdevices/",headers=header)
@@ -14,30 +16,39 @@ def List_Network_devices():
 	print("The list of Network Devices of the Organisation") 
 	return list_dev
 
-print(List_Network_devices())
-print(" ")
+device_names=List_Network_devices()
+print(device_names)
 	
+'''name,model,macAddress,label,serialnumber,tag=input('Enter The name, model,macAdd, label serialnum and tag to create a new network device').split()
+
+def create_network_devices(name,model,macAddress,label,serialnumber,tag):
 
 
-def create_network_devices():
-
-	body_net=	{"name": "1995",
-		"model":"summa",
-		"macAddress":"0123456789ab",
-		"label":"Label1",
-		"serialNumber":"12345a",
-		"tag":"your tag"
+	body_net={
+		"name": name,
+		"model":model,
+		"macAddress":macAddress,
+		"label":label,
+		"serialNumber":serialnumber,
+		"tag":tag
 	}
 	body_post=requests.post("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices",json.dumps(body_net), headers=header)
 	body_post=body_post.json()
 	return body_post 
 
-print(create_network_devices())
+print(create_network_devices(name,model,macAddress,label,serialnumber,tag))'''
 
-	
 
+device_choose=input("Enter the name of the network device to which you want to view the policy for:")
+
+for i in device_names:
+	if i["name"]==device_choose:
+		dict1=i
+		originId=str(dict1["originId"])
+		
+		 	
 def  List_policies():
-	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/" + orgid + "/networkdevices/150384748/policies", headers=header)
+	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/" +orgid +"/networkdevices/"+originId+"/policies", headers=header)
 	list_pol=list_policies.json()
 	print("The policy implemented by the Organisation")
 	print(" ")
@@ -46,7 +57,39 @@ def  List_policies():
 print(List_policies())
 
 
+device_update=input("Enter the name of the network device you want to update:")
+name=input('Enter the updated Device name')
+
+def update_network_device(name):
+	
+	for i in device_names:
+		if i["name"]==device_update:
+			dictn=i
+	originId=str(dictn["originId"])
+
+	body_update={"name":name}
+
+	update_net=requests.patch("https://management.api.umbrella.com/v1/organizations/" +orgid+"/networkdevices/"+originId, json.dumps(body_update),headers=header)
+	update_net=update_net.json()
+	
+	return update_net
+
+print(update_network_device(name))
 
 
+del_device=input("Enter the name of the network device you want to delete:")
 
 
+def delete_network_device(del_device):
+
+	for i in device_names:	
+		if i["name"]==del_device:
+			dictm=i
+	originId=str(dictm["originId"])
+
+	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
+	return del_network
+
+print(delete_network_device(del_device))
+
+	
