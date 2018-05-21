@@ -15,12 +15,13 @@ def List_Network_devices():
 	print("The list of Network Devices of the Organisation")
 	print("=============================================================================================================================")
 	print(" ")
-	for i in range (len(list_dev)):
-		new=str(list_dev[i].items())
-		nw=new.replace(",","\n")
-		print(" ")
-		print(" ")
-		print(nw)
+	for key,value in list_dev:
+		print(key,value)
+		#nw=new.replace("," ,"\n")
+		#print(nw)
+		#print(" ")
+	
+
 
 		#print(list_dev[i]["deviceKey"],list_dev[0]["name"],list_dev[0]["serialNumber"],list_dev[0]["createdAt"],list_dev[0]["originId"],list_dev[0]["organizationId"]
 	
