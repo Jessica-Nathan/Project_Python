@@ -16,13 +16,9 @@ def List_Network_devices():
 	print("=============================================================================================================================")
 	print(" ")
 	for i in list_dev:
-		for j in i:
-			print(j)
-		#nw=new.replace("," ,"\n")
-		#print(nw)
-		#print(" ")
-	
-
+		for j in i.items():
+			print(j.keys())
+		print("\n")
 
 		#print(list_dev[i]["deviceKey"],list_dev[0]["name"],list_dev[0]["serialNumber"],list_dev[0]["createdAt"],list_dev[0]["originId"],list_dev[0]["organizationId"]
 	
