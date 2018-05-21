@@ -15,8 +15,9 @@ def List_Network_devices():
 	print("The list of Network Devices of the Organisation")
 	print("=============================================================================================================================")
 	print(" ")
-	for key,value in list_dev:
-		print(key,value)
+	for i in list_dev:
+		for j in i:
+			print(j)
 		#nw=new.replace("," ,"\n")
 		#print(nw)
 		#print(" ")
