@@ -1,5 +1,4 @@
 import requests
-
 import json
 apikey='Basic ODQxZTJhMjA2Yjc1NDczY2ExMTM0ZTA5ZjMxYmE3Nzc6YmZlMGQ1ZjA4ZjY3NDdlZDg0NzdhY2U0ZWM3NDQ0YjQ='
 header={'Authorization' :apikey,'Content-Type':'application/json'}
@@ -10,18 +9,24 @@ print("The organisation Id is {}" .format(orgid))
 print(" ")
 
 
-
 def List_Network_devices():
 	list_devices=requests.get("https://management.api.umbrella.com/v1/organizations/" + orgid + "/networkdevices/",headers=header)
-	list_dev=str(list_devices.json())
-	print(list_dev)
-	results = list_dev.split(",")
+	list_dev=list_devices.json()
 	print("The list of Network Devices of the Organisation")
 	print("=============================================================================================================================")
-	return results
+	print(" ")
+	for i in range (len(list_dev)):
+		new=str(list_dev[i].items())
+		nw=new.replace(",","\n")
+		print(" ")
+		print(" ")
+		print(nw)
 
-device_names=List_Network_devices()
-print(device_names)
+		#print(list_dev[i]["deviceKey"],list_dev[0]["name"],list_dev[0]["serialNumber"],list_dev[0]["createdAt"],list_dev[0]["originId"],list_dev[0]["organizationId"]
+	
+
+List_Network_devices()
+#print(device_names)
 	
 '''name,model,macAddress,label,serialnumber,tag=input('Enter The name, model,macAdd, label serialnum and tag to create a new network device').split()
 
