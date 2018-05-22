@@ -9,22 +9,23 @@ print("The organisation Id is {}" .format(orgid))
 print(" ")
 
 
-def List_Network_devices():
+def list_Network_devices():
 	list_devices=requests.get("https://management.api.umbrella.com/v1/organizations/" + orgid + "/networkdevices/",headers=header)
 	list_dev=list_devices.json()
 	print("The list of Network Devices of the Organisation")
 	print("=============================================================================================================================")
 	print(" ")
+	n=1
 	for i in list_dev:
+		print("Device#",n)
+		n+=1
 		for j in i.items():
-			print(j.keys())
+			dev=str(j).replace(",", ":")	
+			print(dev)
 		print("\n")
+	return list_dev
+device_names=list_Network_devices()
 
-		#print(list_dev[i]["deviceKey"],list_dev[0]["name"],list_dev[0]["serialNumber"],list_dev[0]["createdAt"],list_dev[0]["originId"],list_dev[0]["organizationId"]
-	
-
-List_Network_devices()
-#print(device_names)
 	
 '''name,model,macAddress,label,serialnumber,tag=input('Enter The name, model,macAdd, label serialnum and tag to create a new network device').split()
 
@@ -41,14 +42,12 @@ def create_network_devices(name,model,macAddress,label,serialnumber,tag):
 	}
 	body_post=requests.post("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices",json.dumps(body_net), headers=header)
 	body_post=body_post.json()
-	new_list=device_names.append(body_post)
 	return body_post 
 
-print(create_network_devices(name,model,macAddress,label,serialnumber,tag))
+print(create_network_devices(name,model,macAddress,label,serialnumber,tag))'''
 
 
 device_choose=input("Enter the name of the network device to which you want to view the policy for:")
-
 for i in device_names:
 	if i["name"]==device_choose:
 		dict1=i
@@ -74,9 +73,7 @@ def update_network_device(name):
 		if i["name"]==device_update:
 			dictn=i
 	originId=str(dictn["originId"])
-
 	body_update={"name":name}
-
 	update_net=requests.patch("https://management.api.umbrella.com/v1/organizations/" +orgid+"/networkdevices/"+originId, json.dumps(body_update),headers=header)
 	update_net=update_net.json()
 	
@@ -98,6 +95,6 @@ def delete_network_device(del_device):
 	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
 	return del_network
 
-print(delete_network_device(del_device))'''
+print(delete_network_device(del_device))
 
 	
