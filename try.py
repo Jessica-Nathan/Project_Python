@@ -52,10 +52,10 @@ def create_network_devices(name,model,macAddress,label,serialnumber,tag):
 	return body_post 
 
 
-def  List_policies():
+def List_policies():
 	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/" +orgid +"/networkdevices/"+originId+"/policies", headers=header)
 	list_pol=list_policies.json()
-	print("The policy implemented by the Organisation")
+	print("The policy implemented for the identity")
 	print(" ")
 	return list_pol
 
@@ -64,9 +64,17 @@ def update_network_device(name):
 	update_net=requests.patch("https://management.api.umbrella.com/v1/organizations/" +orgid+"/networkdevices/"+originId, json.dumps(body_update),headers=header)
 	update_net=update_net.json()
 	return update_net
-		
 
-'''def delete_network_device(del_device):
+
+def list_org_policies():
+	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies?page=1&limit=100",headers=header)
+	list_pol=list_policies.json()
+	print("The policy implemented by the Organisation")
+	print(" ")
+	return list_pol
+
+
+def delete_network_device(del_device):
 	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
 	return del_network
 
@@ -110,6 +118,8 @@ elif select=="4":
 	else:
         	print(" {} device does not exist in this organisation".format(device_update))
 
+elif select=="5":
+	print(list_org_policies())
 
 elif select=="6":
 
