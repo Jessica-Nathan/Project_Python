@@ -9,8 +9,11 @@ orgid=str(oid[0]["organizationId"])
 print("The organisation Id is {}" .format(orgid))
 print(" ")
 
-print(" 1. list the Network devices\n 2.create a network device\n 3. list the policies of the network\n 4.update a network device\n 5. list the policies of the organization\n 6. delete a device form the network\n")
-select=input('enter your choice')
+print("                                                         CISCO UMBRELLA API                                                        ")
+print("\n")
+print("````````````=============``````````===========`````````==========`````````===========``````````==========``````````==========```````=========")
+print(" 1. list the Network devices\n 2. create a network device\n 3. list the policies of the network\n 4. update a network device\n 5. list the policies of the organization\n 6. delete a device form the network\n")
+select=input('Enter your corresponding action:')
 
 
 def device_names():
