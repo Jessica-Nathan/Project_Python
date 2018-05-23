@@ -85,6 +85,12 @@ for i in device_names:
 else:
 	print(" {} device does not exist in this organisation".format(device_update))
 
+
+def delete_network_device(del_device):
+	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
+	return del_network
+
+
 prompt=input('Do you wish to delete a network device from this organisation ? Yes-y and No-n')
 
 if prompt=='y': 
@@ -94,6 +100,7 @@ if prompt=='y':
 			dictm=i
 			originId=str(dictm["originId"])
 			print(delete_network_device(del_device))
+			print("Thanks for using Cicso Umbrella API")
 			break
 	else:
 		print(" {} device does not exist in this organisation".format(prompt))
@@ -101,14 +108,6 @@ if prompt=='y':
 else:
 	print("Thanks for using Cicso Umbrella API")
 
-def delete_network_device(del_device):
-
-	for i in device_names:	
-		if i["name"]==del_device:
-			dictm=i
-			originId=str(dictm["originId"])
-			del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
-	return del_network
 
 
 	
