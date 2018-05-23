@@ -1,5 +1,6 @@
 import requests
 import json
+import sys
 apikey='Basic ODQxZTJhMjA2Yjc1NDczY2ExMTM0ZTA5ZjMxYmE3Nzc6YmZlMGQ1ZjA4ZjY3NDdlZDg0NzdhY2U0ZWM3NDQ0YjQ='
 header={'Authorization' :apikey,'Content-Type':'application/json'}
 oid=requests.get("https://management.api.umbrella.com/v1/organizations/",headers=header)
@@ -46,55 +47,68 @@ def create_network_devices(name,model,macAddress,label,serialnumber,tag):
 
 print(create_network_devices(name,model,macAddress,label,serialnumber,tag))'''
 
+def  List_policies():
+        list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/" +orgid +"/networkdevices/"+originId+"/policies", headers=header)
+        list_pol=list_policies.json()
+        print("The policy implemented by the Organisation")
+        print(" ")
+        return list_pol
+
 
 device_choose=input("Enter the name of the network device to which you want to view the policy for:")
 for i in device_names:
 	if i["name"]==device_choose:
 		dict1=i
 		originId=str(dict1["originId"])
-		
-		 	
-def  List_policies():
-	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/" +orgid +"/networkdevices/"+originId+"/policies", headers=header)
-	list_pol=list_policies.json()
-	print("The policy implemented by the Organisation")
-	print(" ")
-	return list_pol
- 
-print(List_policies())
-
-
-device_update=input("Enter the name of the network device you want to update:")
-name=input('Enter the updated Device name')
+		print(List_policies())
+		break
+	
+else:
+	print(" {} device does not exist in this organisation".format(device_choose)) 
 
 def update_network_device(name):
-	
-	for i in device_names:
-		if i["name"]==device_update:
-			dictn=i
-	originId=str(dictn["originId"])
-	body_update={"name":name}
 	update_net=requests.patch("https://management.api.umbrella.com/v1/organizations/" +orgid+"/networkdevices/"+originId, json.dumps(body_update),headers=header)
 	update_net=update_net.json()
-	
 	return update_net
+		
+ 
+device_update=input("Enter the name of the network device you want to update:")
 
-print(update_network_device(name))
+for i in device_names:
+	if i["name"]==device_update:
+		dictn=i 
+		originId=str(dictn["originId"])
+		name=input('Enter the updated Device name')
+		body_update={"name":name}
+		print(update_network_device(name))
+		break
+else:
+	print(" {} device does not exist in this organisation".format(device_update))
 
+prompt=input('Do you wish to delete a network device from this organisation ? Yes-y and No-n')
 
-del_device=input("Enter the name of the network device you want to delete:")
-
+if prompt=='y': 
+	del_device=input("Enter the name of the network device you want to delete:")
+	for i in device_names:
+		if i["name"]==del_device:
+			dictm=i
+			originId=str(dictm["originId"])
+			print(delete_network_device(del_device))
+			break
+	else:
+		print(" {} device does not exist in this organisation".format(prompt))
+		sys.exit()
+else:
+	print("Thanks for using Cicso Umbrella API")
 
 def delete_network_device(del_device):
 
 	for i in device_names:	
 		if i["name"]==del_device:
 			dictm=i
-	originId=str(dictm["originId"])
-
-	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
+			originId=str(dictm["originId"])
+			del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
 	return del_network
 
-print(delete_network_device(del_device))
 
 	
