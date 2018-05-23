@@ -9,7 +9,7 @@ orgid=str(oid[0]["organizationId"])
 print("The organisation Id is {}" .format(orgid))
 print(" ")
 
-print(" 1. list the Network devices\n 2. update a network device\n 3. list the policies of the network\n 4. list the policies of the organization\n 5. delete a device form the network\n")
+print(" 1. list the Network devices\n 2.create a network device\n 3. list the policies of the network\n 4.update a network device\n 5. list the policies of the organization\n 6. delete a device form the network\n")
 select=input('enter your choice')
 
 
@@ -130,3 +130,21 @@ elif select=="4":
         	print(" {} device does not exist in this organisation".format(device_update))
 
 
+elif select=="6":
+
+	prompt=input('Do you wish to delete a network device from this organisation ? Yes-y and No-n')
+
+	if prompt=='y': 
+        	del_device=input("Enter the name of the network device you want to delete:")
+        	for i in device_names:
+                	if i["name"]==del_device:
+                        	dictm=i
+                        	originId=str(dictm["originId"])
+                        	print(delete_network_device(del_device))
+                        	print("Thanks for using Cicso Umbrella API")
+                        	break
+        	else:
+                	print(" {} device does not exist in this organisation".format(prompt))
+                	sys.exit()
+	else:
+        	print("Thanks for using Cicso Umbrella API")
