@@ -12,7 +12,7 @@ print(" ")
 print("                                          SECURE AUTHENTICATION & IDENTITY MANAGEMENT                                                        ")
 print("\n")
 print("````````````=============``````````===========`````````==========`````````===========``````````==========``````````==========```````=========")
-print(" 1. list the Network devices\n 2. create a network device\n 3. list the policies of the network\n 4. update a network device\n 5. list the policies of the organization\n 6. Assign a polcy to an identity\n 7. delete a device form the network\n")
+print(" 1. list the Network devices\n 2. create a network device\n 3. list the policies of the network\n 4. update a network device\n 5. list the policies of the organization\n 6. Assign a polcy to an identity\n 7. delete a device form the network\n 8. Delete an identity from a Policy\n")
 select=input('Enter your corresponding action:')
 
 
@@ -23,6 +23,12 @@ def devices_list():
 
 def policies_list():
 	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies?page=1&limit=100",headers=header)
+	list_pol=list_policies.json()
+	return list_pol
+
+
+def identity_policies():
+	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/" +orgid +"/networkdevices/"+originId+"/policies", headers=header)
 	list_pol=list_policies.json()
 	return list_pol
 
@@ -87,19 +93,21 @@ def assign_policy():
 	return assign_policy
 
 
-def delete_network_device(del_device):
+def delete_network_device():
 	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
 	return del_network
 
 
+def delete_identity_policy():
+	del_policy=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies/"+PolicyId+"/identities/"+originId,headers=header)
+	return del_policy 
 
 
+### OBJECT CREATION ###
 
 device_names=devices_list()
 policies_list=policies_list()
-
-
-
+identity_policies=identity_policies()
 
 ### USER INTERFACE CREATION ###
 
@@ -168,7 +176,7 @@ elif select=="6":
 
 elif select=="7":
 
-	prompt=input('Do you wish to delete a network device from this organisation ? Yes-y and No-n')
+	prompt=input('Are you sure you want to delete a network device from this organisation ? Yes-y and No-n')
 
 	if prompt=='y': 
         	del_device=input("Enter the name of the network device you want to delete:")
@@ -176,12 +184,58 @@ elif select=="7":
                 	if i["name"]==del_device:
                         	dictm=i
                         	originId=str(dictm["originId"])
-                        	print(delete_network_device(del_device))
-                        	print("Thanks for using Cicso Umbrella API")
+                        	print(delete_network_device())
                         	break
         	else:
                 	print(" {} device does not exist in this organisation".format(del_device))
                 	sys.exit()
 	else:
-        	print("Thanks for using Secure Authentication & identity Management")
+        	print("Done")
+
+
+
+elif select=="8":
+
+        Del_dev=input('Are you sure you want to delete a network device from a particular Policy? Yes-y and No-n')
+
+        if prompt=='y': 
+                del_dev=input("Enter the name of the network device:")
+                for i in device_names:
+                        if i["name"]==del_dev:
+                                dictp=i
+                                originId=str(dictp["originId"])
+                                break
+                else:
+                        print(" {} device does not exist in this organisation".format(del_device))
+                        sys.exit()
+
+
+
+	 policy_name=input("Enter the policy name:")
+         for i in policies_list:
+                if i["name"]==policy_name:
+                        dictq=i
+                        PolicyId=str(dictq["policyId"])
+                        break
+	
+				for i in identity_policies:
+					if i["name"]==policy_name:
+						print(delete_identity_policy())
+						break
+				else:
+					print("{} is not applied for the {} identity".format(policy_name,del_dev))
+					
+			
+
+
+
+
+
+        else:
+                print("Done")
+
+
+
+
+
 
