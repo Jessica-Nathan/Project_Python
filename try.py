@@ -84,16 +84,24 @@ def list_org_policies():
 
 def assign_policy():
 	assign_policy=requests.put("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies/"+PolicyId+"/identities/"+originId, headers=header)
-	assign_pol=assign_policy.json()
-	return assign_pol
+	return assign_policy
 
 
 def delete_network_device(del_device):
 	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
 	return del_network
 
+
+
+
+
 device_names=devices_list()
 policies_list=policies_list()
+
+
+
+
+### USER INTERFACE CREATION ###
 
 if select=="1":
 	print(list_Network_devices())
@@ -151,7 +159,7 @@ elif select=="6":
 	for i in policies_list:
 		if i["name"]==policy_name:
 			dicto=i
-			originId=str(dicto["policyId"])
+			PolicyId=str(dicto["policyId"])
 			print(assign_policy())
 			break
 	else:
