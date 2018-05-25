@@ -22,8 +22,8 @@ def devices_list():
 	return list_dev
 
 def policies_list():
-        list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies?page=1&limit=100",headers=header)
-        list_pol=list_policies.json()
+	list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies?page=1&limit=100",headers=header)
+	list_pol=list_policies.json()
 	return list_pol
 
 
@@ -136,7 +136,7 @@ elif select=="4":
 elif select=="5":
 	print(list_org_policies())
 
-elif select="6":
+elif select=="6":
 	device_assign=input("Enter the Device Name:")
 	for i in device_names:
 		if i["name"]==del_device:
