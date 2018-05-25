@@ -107,7 +107,7 @@ def delete_identity_policy():
 
 device_names=devices_list()
 policies_list=policies_list()
-identity_policies=identity_policies()
+
 
 ### USER INTERFACE CREATION ###
 
@@ -196,42 +196,34 @@ elif select=="7":
 
 elif select=="8":
 
-        Del_dev=input('Are you sure you want to delete a network device from a particular Policy? Yes-y and No-n')
+	prompt=input('Are you sure you want to delete a network device from a particular Policy? Yes-y and No-n')
+	if prompt=='y':
+		del_dev=input("Enter the name of the network device:")
+		for i in device_names:
+			if i["name"]==del_dev:
+				dictp=i
+				originId=str(dictp["originId"])
+				break
+		else:
+			print(" {} device does not exist in this organisation".format(del_dev))
+			sys.exit()
+		identity_policies=identity_policies()
+		policy_name=input("Enter the policy name:")
+		for i in policies_list:
+			if i["name"]==policy_name:
+				dictl=i
+				PolicyId=str(dictl["policyId"])
+				print(delete_identity_policy())
+				break
 
-        if prompt=='y': 
-                del_dev=input("Enter the name of the network device:")
-                for i in device_names:
-                        if i["name"]==del_dev:
-                                dictp=i
-                                originId=str(dictp["originId"])
-                                break
-                else:
-                        print(" {} device does not exist in this organisation".format(del_device))
-                        sys.exit()
-
-
-
-	 policy_name=input("Enter the policy name:")
-         for i in policies_list:
-                if i["name"]==policy_name:
-                        dictq=i
-                        PolicyId=str(dictq["policyId"])
-                        break
-	
-				for i in identity_policies:
-					if i["name"]==policy_name:
-						print(delete_identity_policy())
-						break
-				else:
-					print("{} is not applied for the {} identity".format(policy_name,del_dev))
+		'''for i in identity_policies:
+			if i["name"]==policy_name:
+				print(delete_identity_policy())
+				break
+		else:
+			print("{} is not applied for the {} identity".format(policy_name,del_dev))'''
 					
-			
-
-
-
-
-
-        else:
+	else:
                 print("Done")
 
 
