@@ -12,14 +12,20 @@ print(" ")
 print("                                          SECURE AUTHENTICATION & IDENTITY MANAGEMENT                                                        ")
 print("\n")
 print("````````````=============``````````===========`````````==========`````````===========``````````==========``````````==========```````=========")
-print(" 1. list the Network devices\n 2. create a network device\n 3. list the policies of the network\n 4. update a network device\n 5. list the policies of the organization\n 6. delete a device form the network\n")
+print(" 1. list the Network devices\n 2. create a network device\n 3. list the policies of the network\n 4. update a network device\n 5. list the policies of the organization\n 6. Assign a polcy to an identity\n 7. delete a device form the network\n")
 select=input('Enter your corresponding action:')
 
 
-def device_names():
+def devices_list():
 	list_devices=requests.get("https://management.api.umbrella.com/v1/organizations/" + orgid + "/networkdevices/",headers=header)
 	list_dev=list_devices.json()
 	return list_dev
+
+def policies_list():
+        list_policies=requests.get("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies?page=1&limit=100",headers=header)
+        list_pol=list_policies.json()
+	return list_pol
+
 
 def list_Network_devices():
         
@@ -76,12 +82,18 @@ def list_org_policies():
 	print(" ")
 	return list_pol
 
+def assign_policy():
+	assign_policy=requests.put("https://management.api.umbrella.com/v1/organizations/"+orgid+"/policies/973998/identities/"+originId, headers=header)
+	assign_pol=assign_policy.json()
+	return assign_pol
+
 
 def delete_network_device(del_device):
 	del_network=requests.delete("https://management.api.umbrella.com/v1/organizations/"+orgid+"/networkdevices/" +originId,headers=header)
 	return del_network
 
-device_names=device_names()
+devices_names=device_names()
+policies_list=policies_list()
 
 if select=="1":
 	print(list_Network_devices())
@@ -124,7 +136,29 @@ elif select=="4":
 elif select=="5":
 	print(list_org_policies())
 
-elif select=="6":
+elif select="6":
+	device_assign=input("Enter the Device Name:")
+	for i in device_names:
+		if i["name"]==del_device:
+			dictz=i
+			originId=str(dictz["originId"])
+			break
+	else:
+		print(" {} device does not exist in this organisation".format(device_assign))
+
+
+	policy_name=input("Enter the policy name:")
+	for i in policies_list:
+		if i["name"]==policy_name:
+			dicto=i
+			originId=str(dicto["policyId"])
+			print(assign_policy())
+			break
+	else:
+		print(" {} Policy does not exist in this organisation".format(policy_name))
+
+
+elif select=="7":
 
 	prompt=input('Do you wish to delete a network device from this organisation ? Yes-y and No-n')
 
@@ -141,4 +175,5 @@ elif select=="6":
                 	print(" {} device does not exist in this organisation".format(del_device))
                 	sys.exit()
 	else:
-        	print("Thanks for using Cicso Umbrella API")
+        	print("Thanks for using Secure Authentication & identity Management")
+
